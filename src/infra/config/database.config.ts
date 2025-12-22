@@ -10,15 +10,12 @@ const config = {
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'nest_db',
   entities: ['dist/**/*.entity{.ts,.js}'],
-	migrations: ['dist/src/infra/database/migrations/*{.ts,.js}'],
+	migrations: ['dist/infra/database/migrations/*{.ts,.js}'],
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-  // migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
-  // cli: {
-  //   migrationsDir: 'src/infra/database/migrations',
-  // },
+
 };
 export default registerAs('database', () => config);
 
