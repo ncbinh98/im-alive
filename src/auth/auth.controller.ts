@@ -13,6 +13,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/auth.decorator';
 import { TokenBucketRatelimiterInterceptor } from 'src/rate-limters/token-bucket.rate-limiter';
 import { LeakyBucketRatelimiterInterceptor } from 'src/rate-limters/leaky-bucket.rate-limiter';
+import { FixedWindowRatelimiterInterceptor } from 'src/rate-limters/fixed-window.rate-limiter';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +21,8 @@ export class AuthController {
 
   @Post('/login')
   // @UseInterceptors(TokenBucketRatelimiterInterceptor)
-  @UseInterceptors(LeakyBucketRatelimiterInterceptor)
+  // @UseInterceptors(LeakyBucketRatelimiterInterceptor)
+  @UseInterceptors(FixedWindowRatelimiterInterceptor)
   login(@Body() dto: LoginDto) {
     return this.authSvc.login(dto);
   }
