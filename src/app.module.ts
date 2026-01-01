@@ -7,6 +7,7 @@ import databaseConfig from './infra/config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { UtilsModule } from './utils/utils.module';
+import { RateLimitersModule } from './rate-limters/rate-limiters.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { UtilsModule } from './utils/utils.module';
     }),
     AuthModule,
     UsersModule,
-    UtilsModule
+    UtilsModule,
+    RateLimitersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

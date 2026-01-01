@@ -5,16 +5,19 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { QueryUserDto } from './dto/query-user.dto';
+import { UtilsService } from 'src/utils/utiles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private utilsService: UtilsService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -25,8 +28,27 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+  async findAll(dto: QueryUserDto) {
+    const page = Number(dto.page) || 1;
+    const limit = Number(dto.limit) || 10;
+    const query = {};
+    if (dto.email) {
+      query['email'] = Like(`%${dto.email}%`);
+    }
+    if (dto.isActive) {
+      query['isActive'] = dto.isActive;
+    }
+    const [users, total] = await this.usersRepository.findAndCount({
+      where: query,
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+    return this.utilsService.formatPagination({
+      items: users,
+      page,
+      limit,
+      total,
+    });
   }
 
   async findOne(id: string): Promise<User> {
