@@ -1,3 +1,4 @@
+// src/users/entities/user.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -26,13 +27,12 @@ export class User {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
+  @Column({ type: 'varchar', nullable: true })
+  refreshToken: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
-
-  // Example of relation (if you have another entity)
-  // @OneToMany(() => Post, (post) => post.user)
-  // posts: Post[];
 }

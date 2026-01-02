@@ -33,4 +33,9 @@ export class AuthController {
     const user = req.user;
     return this.authSvc.getMe(user);
   }
+
+  @Post('refresh-token')
+  async refreshToken(@Body() body: { refreshToken: string }) {
+    return this.authSvc.refreshTokens(body.refreshToken);
+  }
 }
