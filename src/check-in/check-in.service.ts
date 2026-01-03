@@ -200,8 +200,8 @@ export class CheckInService {
   //   }
 
   //   // Helper method for testing
-  //   async forceCheckMissedCheckIns(): Promise<void> {
-  //     this.logger.warn('Force checking missed check-ins');
-  //     await this.checkMissedCheckIns();
-  //   }
+    async forceCheckMissedCheckIns(): Promise<void> {
+      this.logger.warn('Force checking missed check-ins');
+      await this.checkMissedCheckIns();
+    }
 }

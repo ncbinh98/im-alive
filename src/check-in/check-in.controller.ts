@@ -69,10 +69,10 @@ export class CheckInController {
   }
 
   // For testing purposes only - should be protected in production
-  //   @Post('test-alert')
-  //   async testAlert(@Request() req) {
-  //     // This would trigger a manual check for alerts
-  //     await this.checkInService.forceCheckMissedCheckIns();
-  //     return { message: 'Alert check triggered manually' };
-  //   }
+    @Post('test-alert')
+    async testAlert(@Request() req) {
+      // This would trigger a manual check for alerts
+      await this.checkInService.forceCheckMissedCheckIns();
+      return { message: 'Alert check triggered manually' };
+    }
 }
