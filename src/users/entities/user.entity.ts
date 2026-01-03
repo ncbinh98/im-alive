@@ -1,10 +1,14 @@
 // src/users/entities/user.entity.ts
+import { CheckIn } from 'src/check-in/entities/check-in.entity';
+import { UserCheckInStatus } from 'src/check-in/entities/user-checkin-status.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 @Entity('users')
@@ -35,4 +39,10 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  @OneToMany(() => CheckIn, (checkIn) => checkIn.user)
+  checkIns: CheckIn[];
+
+  @OneToOne(() => UserCheckInStatus, (status) => status.user)
+  checkInStatus: UserCheckInStatus;
 }
