@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { UtilsModule } from './utils/utils.module';
 import { RateLimitersModule } from './rate-limters/rate-limiters.module';
+import { CheckInModule } from './check-in/check-in.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RateLimitersModule } from './rate-limters/rate-limiters.module';
     UsersModule,
     UtilsModule,
     RateLimitersModule,
+    CheckInModule,
   ],
   controllers: [AppController],
   providers: [AppService],
