@@ -38,9 +38,6 @@ export class ConsistentHashingService {
 
     this.stableServers.set(`${server.ip}:${server.name}`, stableServer);
 
-    console.log('@@@hashing', this.hashRing.entries());
-    console.log('@@@stableServers', this.stableServers.entries());
-
     return [...this.hashRing.entries()];
   }
 
@@ -53,8 +50,6 @@ export class ConsistentHashingService {
     });
     this.stableServers.delete(`${server.ip}:${server.name}`);
 
-    console.log('@@@hashing', this.hashRing.entries());
-    console.log('@@@stableServers', this.stableServers.entries());
     return [...this.hashRing.entries()];
   }
 
@@ -69,13 +64,9 @@ export class ConsistentHashingService {
 
   getServerByKey(key: string): Server | null {
     const hashKey = this.generateHashKey(key);
-    console.log('@@@key:', key);
-    console.log('--->@@@hashKey:', hashKey);
     const sortedHashKeys = [...this.hashRing.keys()].sort((a, b) => a - b);
-    console.log('@@@sortedHashKeys', sortedHashKeys);
     for (let i = 0; i < sortedHashKeys.length; i++) {
       if (sortedHashKeys[i] >= hashKey) {
-        console.log('@@@sortedHashKeys[i]:', sortedHashKeys[i]);
         return this.hashRing.get(sortedHashKeys[i]) || null;
       }
     }
