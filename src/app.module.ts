@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { UtilsModule } from './utils/utils.module';
 import { RateLimitersModule } from './rate-limters/rate-limiters.module';
 import { CheckInModule } from './check-in/check-in.module';
+import { LearningModule } from './learning/learning.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CheckInModule } from './check-in/check-in.module';
     UtilsModule,
     RateLimitersModule,
     CheckInModule,
+    LearningModule
   ],
   controllers: [AppController],
   providers: [AppService],
