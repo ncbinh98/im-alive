@@ -21,7 +21,7 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "migration:run": "npm run typeorm migration:run -- -d ./src/infra/config/database.config.ts",
     "migration:generate": "cross-var npm run typeorm -- -d ./src/infra/config/database.config.ts migration:generate ./src/infra/database/migrations/$npm_config_name",
-    "migration:create": "cross-var npm run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
+    "migration:create": "cross-var npm run typeorm -- migration:create ./src/infra/database/migrations/$npm_config_name",
     "migration:revert": "npm run typeorm -- -d ./src/infra/config/database.config.ts migration:revert"
   },
   "dependencies": {
