@@ -10,6 +10,7 @@ import { UtilsModule } from './utils/utils.module';
 import { RateLimitersModule } from './rate-limters/rate-limiters.module';
 import { CheckInModule } from './check-in/check-in.module';
 import { LearningModule } from './learning/learning.module';
+import { TelegramBotModule } from './telegram-bot/telegram-bot.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { LearningModule } from './learning/learning.module';
     UtilsModule,
     RateLimitersModule,
     CheckInModule,
-    LearningModule
+    LearningModule,
+    TelegramBotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
