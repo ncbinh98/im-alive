@@ -5,4 +5,7 @@ import { IsOptional } from 'class-validator';
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   refreshToken?: string;
+
+  @IsOptional()
+  telegramId?: string;
 }
