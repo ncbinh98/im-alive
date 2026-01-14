@@ -70,6 +70,10 @@ export class UsersService {
     return user;
   }
 
+  async findByTelegramId(telegramId: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { telegramId } });
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { email } });
   }

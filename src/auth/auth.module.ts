@@ -15,9 +15,10 @@ import { UsersModule } from 'src/users/users.module';
         signOptions: { expiresIn: '30m' },
       }),
     }),
-    UsersModule
+    UsersModule,
   ],
-  controllers:[AuthController],
+  controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
