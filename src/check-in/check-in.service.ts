@@ -9,7 +9,7 @@ import { CheckIn } from './entities/check-in.entity';
 import { UserCheckInStatus } from './entities/user-checkin-status.entity';
 import { CreateCheckInDto } from './dto/create-checkin.dto';
 import { User } from '../users/entities/user.entity';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Repository } from 'typeorm';
 import { UserJwtPayload } from 'src/auth/interfaces/user-jwt-payload.interface';
 import { UpdateCheckInConfigDto } from './dto/update-checkin-config.dto';
@@ -23,7 +23,6 @@ export class CheckInService {
     private checkInRepository: Repository<CheckIn>,
     @InjectRepository(UserCheckInStatus)
     private userCheckInStatusRepository: Repository<UserCheckInStatus>,
-    // private emailService: EmailService,
   ) {}
 
   async checkIn(
@@ -137,7 +136,9 @@ export class CheckInService {
   }
 
   // Cron job to check for missed check-ins
-  @Cron('0 9 * * *') // Runs daily at 9:00 AM
+
+  // Old cron job (commented out or kept as reference)
+  // @Cron('0 9 * * *')
   async checkMissedCheckIns() {
     this.logger.log('Starting missed check-ins check...');
 
@@ -200,8 +201,8 @@ export class CheckInService {
   //   }
 
   //   // Helper method for testing
-    async forceCheckMissedCheckIns(): Promise<void> {
-      this.logger.warn('Force checking missed check-ins');
-      await this.checkMissedCheckIns();
-    }
+  async forceCheckMissedCheckIns(): Promise<void> {
+    this.logger.warn('Force checking missed check-ins');
+    await this.checkMissedCheckIns();
+  }
 }

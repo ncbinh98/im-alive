@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Inject, forwardRef } from '@nestjs/common';
 import TelegramBot from 'node-telegram-bot-api';
 import { SendMessageDto } from './dto/send-message.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -11,6 +11,7 @@ export class TelegramBotService implements OnModuleInit {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
+    @Inject(forwardRef(() => CheckInService))
     private checkInService: CheckInService,
   ) {}
   private bot: TelegramBot;
