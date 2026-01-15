@@ -8,4 +8,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @IsOptional()
   telegramId?: string;
+
+  @IsOptional()
+  isActive?: boolean;
 }

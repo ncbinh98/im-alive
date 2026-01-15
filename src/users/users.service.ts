@@ -42,6 +42,9 @@ export class UsersService {
       where: query,
       take: limit,
       skip: (page - 1) * limit,
+      order: {
+        createdAt: 'DESC',
+      },
     });
     return this.utilsService.formatPagination({
       items: users,
