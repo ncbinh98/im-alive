@@ -1,9 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import moment from 'moment';
+import { TelegramBotService } from 'src/telegram-bot/telegram-bot.service';
 import { Repository } from 'typeorm';
 import { UserCheckInStatus } from './entities/user-checkin-status.entity';
-import { TelegramBotService } from 'src/telegram-bot/telegram-bot.service';
 
 @Injectable()
 export class CheckInCron {
@@ -69,6 +70,64 @@ export class CheckInCron {
       }
     } catch (error) {
       this.logger.error('Error in check3DaysMissedCheckIns cron job:', error);
+    }
+  }
+
+  /* 
+    Cron job to check for missed check-ins, based on alertAfterDays
+    Runs daily at 9:00 AM
+  */
+  // @Cron('0 9 * * *')
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_8AM)
+  async checkMissedCheckIns() {
+    this.logger.log('Starting missed check-ins check...');
+
+    const now = new Date();
+
+    try {
+      // Find users who need alerts
+      const usersNeedingAlert = await this.userCheckInStatusRepository
+        .createQueryBuilder('status')
+        .innerJoinAndSelect('status.user', 'user')
+        .where('status.alertsEnabled = :enabled', { enabled: true })
+        .andWhere('status.expiredLatestCheckIn < :now', { now })
+        .andWhere(
+          '(status.nextAlertCheck IS NULL OR status.nextAlertCheck < :now)',
+          { now },
+        )
+        .getMany();
+
+      this.logger.log(`Found ${usersNeedingAlert.length} users needing alerts`);
+
+      for (const status of usersNeedingAlert) {
+        try {
+          //   await this.sendAlertEmail(status.user, status);
+          this.logger.log('alert sent', status);
+          await this.telegramBotService.sendMessage({
+            chatId: status.user.telegramId,
+            message: `⚠️ WARNING: You haven't checked in for ${moment(status.latestCheckIn).fromNow()}! Please check in immediately to confirm you are safe.`,
+          });
+
+          await this.telegramBotService.sendCheckInButton(
+            Number(status.user.telegramId),
+            'Please click below to check in 👇',
+          );
+
+          // Update nextAlertCheck to avoid spamming (check again in 24 hours)
+          status.nextAlertCheck = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+          await this.userCheckInStatusRepository.save(status);
+
+          this.logger.log(`Alert sent to user: ${status.user.email}`);
+        } catch (error) {
+          this.logger.error(
+            `Failed to send alert to user ${status.user.email}:`,
+            error,
+          );
+        }
+      }
+    } catch (error) {
+      this.logger.error('Error in checkMissedCheckIns cron job:', error);
     }
   }
 }
