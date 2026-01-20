@@ -11,4 +11,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @IsOptional()
   isActive?: boolean;
+
+  @IsOptional()
+  emergencyContacts?: Array<{
+    name: string;
+    email?: string;
+    telegramId?: string;
+    message?: string;
+  }>;
 }

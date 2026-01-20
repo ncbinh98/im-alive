@@ -38,6 +38,12 @@ export class UserCheckInStatus {
   @Column({ name: 'alerts_enabled', type: 'boolean', default: true })
   alertsEnabled: boolean;
 
+  @Column({ name: 'total_alerts_sent', type: 'int', default: 0 })
+  totalAlertsSent: number;
+
+  @Column({ name: 'emergency_threshold_days', type: 'int', default: 7 })
+  emergencyThresholdDays: number;
+
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
