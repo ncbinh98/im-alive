@@ -121,8 +121,9 @@ export class CheckInCron {
             );
 
             if (
-              missedDurationDays >= status.emergencyThresholdDays &&
-              (status.totalAlertsSent === 3 || status.totalAlertsSent === 5)
+              // missedDurationDays >= status.emergencyThresholdDays &&
+              status.totalAlertsSent === 3 ||
+              status.totalAlertsSent === 5
             ) {
               // If total alerts sent is 3, return
 
@@ -142,7 +143,7 @@ export class CheckInCron {
                   if (contact.telegramId) {
                     await this.telegramBotService.sendMessage({
                       chatId: contact.telegramId,
-                      message: message,
+                      message: `⚠️THIS IS IMPORTANT MESSAGE FROM <${status.user.firstName} ${status.user.lastName}> TO <${contact.name}>:\n ${message}`,
                     });
                   }
 
