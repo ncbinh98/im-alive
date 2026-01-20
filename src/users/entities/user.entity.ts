@@ -48,4 +48,12 @@ export class User {
 
   @OneToOne(() => UserCheckInStatus, (status) => status.user)
   checkInStatus: UserCheckInStatus;
+
+  @Column({ type: 'jsonb', nullable: true })
+  emergencyContacts: Array<{
+    name: string;
+    email?: string;
+    telegramId?: string;
+    message?: string;
+  }>;
 }
