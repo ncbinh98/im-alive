@@ -62,6 +62,7 @@ export class CheckInService {
       userStatus.latestCheckIn = checkInTime;
       userStatus.expiredLatestCheckIn = expiredDate;
       userStatus.nextAlertCheck = null; // Reset alert check since user just checked in
+      userStatus.totalAlertsSent = 0; // Reset alerts sent count
       await this.userCheckInStatusRepository.save(userStatus);
     } else {
       // Create new status
@@ -73,6 +74,7 @@ export class CheckInService {
         expiredLatestCheckIn: expiredDate,
         nextAlertCheck: null,
         alertsEnabled: true,
+        totalAlertsSent: 0,
       });
       await this.userCheckInStatusRepository.save(newStatus);
     }
@@ -139,47 +141,6 @@ export class CheckInService {
 
   // Old cron job (commented out or kept as reference)
   // @Cron('0 9 * * *')
-  async checkMissedCheckIns() {
-    this.logger.log('Starting missed check-ins check...');
-
-    const now = new Date();
-
-    try {
-      // Find users who need alerts
-      const usersNeedingAlert = await this.userCheckInStatusRepository
-        .createQueryBuilder('status')
-        .innerJoinAndSelect('status.user', 'user')
-        .where('status.alertsEnabled = :enabled', { enabled: true })
-        .andWhere('status.expiredLatestCheckIn < :now', { now })
-        .andWhere(
-          '(status.nextAlertCheck IS NULL OR status.nextAlertCheck < :now)',
-          { now },
-        )
-        .getMany();
-
-      this.logger.log(`Found ${usersNeedingAlert.length} users needing alerts`);
-
-      for (const status of usersNeedingAlert) {
-        try {
-          //   await this.sendAlertEmail(status.user, status);
-          this.logger.log('alert sent', status);
-
-          // Update nextAlertCheck to avoid spamming (check again in 24 hours)
-          status.nextAlertCheck = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-          await this.userCheckInStatusRepository.save(status);
-
-          this.logger.log(`Alert sent to user: ${status.user.email}`);
-        } catch (error) {
-          this.logger.error(
-            `Failed to send alert to user ${status.user.email}:`,
-            error,
-          );
-        }
-      }
-    } catch (error) {
-      this.logger.error('Error in checkMissedCheckIns cron job:', error);
-    }
-  }
 
   //   private async sendAlertEmail(user: User, status: UserCheckInStatus): Promise<void> {
   //     const daysOverdue = Math.floor(
@@ -199,10 +160,4 @@ export class CheckInService {
 
   //     await this.emailService.sendEmail(user.email, subject, html);
   //   }
-
-  //   // Helper method for testing
-  async forceCheckMissedCheckIns(): Promise<void> {
-    this.logger.warn('Force checking missed check-ins');
-    await this.checkMissedCheckIns();
-  }
 }
