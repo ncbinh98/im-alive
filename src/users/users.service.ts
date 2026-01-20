@@ -65,6 +65,7 @@ export class UsersService {
         'isActive',
         'createdAt',
         'updatedAt',
+        'emergencyContacts',
       ],
     });
     if (!user) {
