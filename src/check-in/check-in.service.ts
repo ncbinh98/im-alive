@@ -123,6 +123,9 @@ export class CheckInService {
     if (updateDto.alertsEnabled !== undefined) {
       status.alertsEnabled = updateDto.alertsEnabled;
     }
+    if (updateDto.emergencyThresholdDays !== undefined) {
+      status.emergencyThresholdDays = updateDto.emergencyThresholdDays;
+    }
 
     return this.userCheckInStatusRepository.save(status);
   }
