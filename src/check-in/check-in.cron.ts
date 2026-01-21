@@ -121,9 +121,7 @@ export class CheckInCron {
             );
 
             if (
-              // missedDurationDays >= status.emergencyThresholdDays &&
-              status.totalAlertsSent === 3 ||
-              status.totalAlertsSent === 5
+              status.totalAlertsSent === (status.emergencyThresholdDays ?? 3)
             ) {
               // If total alerts sent is 3, return
 
