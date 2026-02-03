@@ -41,7 +41,7 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
-
+.vscode
 # temp directory
 .temp
 .tmp
